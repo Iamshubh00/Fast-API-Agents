@@ -1,0 +1,125 @@
+[
+  {
+    "_label": "likely_false_positive",
+    "source": "edr",
+    "severity_raw": "low",
+    "raw_event": {
+      "host_id": "host-317",
+      "src_ip": "10.20.1.44",
+      "user": "svc-backup",
+      "event": "Scheduled backup script backup_nightly.ps1 executed PowerShell with -File argument as part of routine cron job. Matches known scheduled task signature.",
+      "process": "powershell.exe",
+      "parent_process": "taskeng.exe",
+      "timestamp": "2026-08-21T02:00:11Z"
+    }
+  },
+
+  {
+    "_label": "isolated_recon_medium",
+    "source": "ids",
+    "severity_raw": "medium",
+    "raw_event": {
+      "host_id": "host-552",
+      "src_ip": "203.0.113.88",
+      "user": null,
+      "event": "Port scan detected: 240 distinct ports probed on host-552 within 12 seconds from external IP 203.0.113.88",
+      "dest_ports_scanned": 240,
+      "duration_seconds": 12,
+      "timestamp": "2026-08-21T09:14:02Z"
+    }
+  },
+
+  {
+    "_label": "attack_stage_1_initial_access",
+    "source": "edr",
+    "severity_raw": "high",
+    "raw_event": {
+      "host_id": "host-042",
+      "src_ip": "198.51.100.23",
+      "user": "jdoe",
+      "event": "Phishing email attachment invoice_Q3.docm opened by user jdoe, spawned macro execution leading to encoded PowerShell command",
+      "process": "powershell.exe",
+      "command_line": "powershell -enc JABzAD0ATgBlAHcALQBPAGIAagBlAGMAdA==",
+      "parent_process": "winword.exe",
+      "file_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85",
+      "timestamp": "2026-08-21T10:02:15Z"
+    }
+  },
+  {
+    "_label": "attack_stage_2_credential_access",
+    "source": "edr",
+    "severity_raw": "high",
+    "raw_event": {
+      "host_id": "host-042",
+      "src_ip": "198.51.100.23",
+      "user": "jdoe",
+      "event": "LSASS memory access detected from non-standard process, consistent with credential dumping technique",
+      "process": "rundll32.exe",
+      "target_process": "lsass.exe",
+      "parent_process": "powershell.exe",
+      "timestamp": "2026-08-21T10:04:47Z"
+    }
+  },
+  {
+    "_label": "attack_stage_3_lateral_movement",
+    "source": "siem",
+    "severity_raw": "critical",
+    "raw_event": {
+      "host_id": "host-089",
+      "src_ip": "198.51.100.23",
+      "user": "jdoe",
+      "event": "Successful SMB authentication from host-042 to host-089 using jdoe credentials outside normal working hours, followed by remote service creation",
+      "dest_host_id": "host-089",
+      "auth_type": "NTLM",
+      "time_of_day": "03:12 local",
+      "timestamp": "2026-08-21T10:12:03Z"
+    }
+  },
+  {
+    "_label": "attack_stage_4_exfil_attempt",
+    "source": "siem",
+    "severity_raw": "critical",
+    "raw_event": {
+      "host_id": "host-089",
+      "src_ip": "198.51.100.23",
+      "user": "jdoe",
+      "event": "Large outbound data transfer (4.2 GB) from host-089 to unrecognized external IP over non-standard port shortly after remote service creation",
+      "dest_ip": "192.0.2.77",
+      "bytes_transferred": 4508928000,
+      "dest_port": 4444,
+      "timestamp": "2026-08-21T10:19:56Z"
+    }
+  },
+
+  {
+    "_label": "isolated_impossible_travel",
+    "source": "sso",
+    "severity_raw": "medium",
+    "raw_event": {
+      "host_id": null,
+      "src_ip": "192.0.2.201",
+      "user": "asmith",
+      "event": "Login for user asmith from Mumbai, India at 14:02 UTC, followed by login from Berlin, Germany at 14:09 UTC -- physically implausible travel time",
+      "location_1": "Mumbai, IN",
+      "location_2": "Berlin, DE",
+      "minutes_between_logins": 7,
+      "timestamp": "2026-08-21T14:09:00Z"
+    }
+  },
+
+  {
+    "_label": "malware_detection_high_confidence",
+    "source": "edr",
+    "severity_raw": "critical",
+    "raw_event": {
+      "host_id": "host-777",
+      "src_ip": "10.20.3.15",
+      "user": "rpatel",
+      "event": "Known ransomware binary signature matched on written file, followed by rapid mass file rename with .locked extension across multiple directories",
+      "file_hash": "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3",
+      "files_renamed_count": 1842,
+      "process": "svchost32.exe",
+      "timestamp": "2026-08-21T11:45:30Z"
+    }
+  }
+]
