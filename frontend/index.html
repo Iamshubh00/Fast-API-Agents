@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d1117">
+  <title>Sentinel | Cyber Defense Console</title>
+  <link rel="stylesheet" href="/console/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">S</span><span>sentinel<span class="brand-dot">.</span></span></div>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav>
+        <button class="nav-item active" data-view="overview"><span class="nav-icon">+</span> Command center</button>
+        <button class="nav-item" data-view="ingest"><span class="nav-icon">&#8595;</span> Ingest alert</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="system-status"><span class="pulse"></span><span><strong>Systems nominal</strong><small>API connected</small></span></div>
+        <div class="user-chip"><span class="avatar">DL</span><span><strong>Dev local</strong><small>SOC lead</small></span><span class="chevron">&#8964;</span></div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div><div class="eyebrow">SECURITY OPERATIONS / <span id="current-date"></span></div><h1>Command center</h1></div>
+        <div class="top-actions"><button class="icon-button" id="refresh-btn" title="Refresh alerts">&#8635;</button><button class="primary-button" id="new-alert-btn">+ New alert</button></div>
+      </header>
+
+      <div id="toast" class="toast" role="status"></div>
+      <section id="overview-view" class="view">
+        <div class="stat-grid">
+          <article class="stat-card accent-red"><span class="stat-label">Open alerts</span><strong id="open-count">--</strong><span class="stat-meta">Needs investigation</span></article>
+          <article class="stat-card accent-amber"><span class="stat-label">Awaiting approval</span><strong id="approval-count">--</strong><span class="stat-meta">Human decision required</span></article>
+          <article class="stat-card accent-mint"><span class="stat-label">Closed today</span><strong id="closed-count">--</strong><span class="stat-meta">Auto-closed or resolved</span></article>
+          <article class="stat-card accent-blue"><span class="stat-label">Pipeline health</span><strong>100<span class="unit">%</span></strong><span class="stat-meta"><span class="inline-pulse"></span> All agents online</span></article>
+        </div>
+
+        <div class="content-grid">
+          <section class="panel alert-panel"><div class="panel-heading"><div><span class="section-kicker">LIVE QUEUE</span><h2>Alert queue</h2></div><span id="alert-count" class="count-pill">0 alerts</span></div><div class="filters"><button class="filter active" data-filter="all">All</button><button class="filter" data-filter="high">High priority</button><button class="filter" data-filter="awaiting_approval">Approval</button></div><div id="alert-list" class="alert-list"><div class="empty-state">Loading alert queue...</div></div></section>
+          <section id="detail-panel" class="panel detail-panel"><div class="empty-detail"><div class="empty-glyph">+</div><h2>Select an alert</h2><p>Choose an alert from the queue to inspect its event and agent trace.</p></div></section>
+        </div>
+      </section>
+
+      <section id="ingest-view" class="view hidden"><div class="form-wrap"><div class="section-kicker">MANUAL INGESTION</div><h2>Bring an alert into the queue</h2><p class="form-intro">Submit a structured event to start the triage pipeline.</p><form id="alert-form"><div class="form-row"><label>Source<select name="source"><option>edr</option><option>siem</option><option>ids</option><option>sso</option><option>manual</option></select></label><label>Reported severity<select name="severity_raw"><option>critical</option><option>high</option><option>medium</option><option>low</option></select></label></div><label>Event description<textarea name="event" required placeholder="Describe what happened and why it was detected..."></textarea></label><div class="form-row"><label>Host ID<input name="host_id" placeholder="host-042"></label><label>Source IP<input name="src_ip" placeholder="198.51.100.23"></label></div><label>User<input name="user" placeholder="jdoe"></label><button class="primary-button submit-button" type="submit">Create alert <span>&#8594;</span></button></form></div></section>
+    </main>
+  </div>
+  <script src="/console/app.js"></script>
+</body>
+</html>

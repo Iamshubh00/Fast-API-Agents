@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from pydantic import BaseModel
 
 from app.db import get_session
@@ -19,6 +20,26 @@ class RawAlertIn(BaseModel):
 class ApprovalDecision(BaseModel):
     approved: bool
     justification: str
+
+
+@router.get("/alerts")
+async def list_alerts(
+    session: AsyncSession = Depends(get_session),
+    user: dict = Depends(require_role("soc-analyst")),
+):
+    """Return recent alerts for the SOC console."""
+    result = await session.execute(select(Alert).order_by(Alert.created_at.desc()).limit(100))
+    return [
+        {
+            "id": alert.id,
+            "source": alert.source,
+            "severity_raw": alert.severity_raw,
+            "status": alert.status,
+            "raw_event": alert.raw_event,
+            "created_at": alert.created_at.isoformat() if alert.created_at else None,
+        }
+        for alert in result.scalars()
+    ]
 
 
 @router.post("/alerts", status_code=201)

@@ -8,6 +8,13 @@ POST /agents/alerts/{id}/run   -> runs the pipeline: triage -> enrichment -> cor
 GET  /agents/alerts/{id}/trace -> full audit trace of what every agent saw and said
 POST /agents/alerts/{id}/approve-response  -> soc-lead ONLY; the sole endpoint that can approve
                                                a destructive action recommendation
+
+Web console
+-----------
+Start the API with the command above, then open `http://localhost:8000/console/`.
+The JavaScript console provides a live alert queue, manual alert ingestion, pipeline execution,
+agent trace inspection, and the `soc-lead` response approval workflow. It is served by FastAPI,
+so it uses the same origin and authentication as the API.
 ```
 Each agent (`app/agents/*.py`) has exactly one job and returns strict JSON, never free text.
 Critical safety design -- read this before extending
@@ -36,7 +43,8 @@ Setup
 ```bash
 cp .env.example .env   # fill in OPENAI_API_KEY, DATABASE_URL, etc.
 pip install -r requirements.txt
-alembic upgrade head    # after writing migrations for the models in app/models.py
+docker compose up -d   # starts PostgreSQL and Redis
+python -m scripts.init_db
 uvicorn app.main:app --reload
 ```
 Extending this
